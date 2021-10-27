@@ -1,0 +1,11 @@
+Topics/
+/.gradle/
+course-info.yaml
+course-remote-info.yaml
+/Seam\ Carving/*
+!/Seam\ Carving/task
+/Seam\ Carving/task/*
+!/Seam\ Carving/task/src
+!/Seam\ Carving/task/build.gradle
+/util/
+/.idea/
