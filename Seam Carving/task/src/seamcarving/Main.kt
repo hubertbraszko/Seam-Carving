@@ -25,8 +25,8 @@ fun main() {
     val graphics = image.createGraphics()
 
     graphics.color = Color.RED
-    graphics.drawLine(0,0,width,height)
-    graphics.drawLine(0,height, width, 0)
+    graphics.drawLine(0,0,width-1,height-1)
+    graphics.drawLine(0,height-1, width-1, 0)
 
 
     saveImage(image,imageFile)
