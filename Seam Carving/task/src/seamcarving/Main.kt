@@ -6,30 +6,33 @@ import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 
-fun main() {
-    val width : Int
-    val height : Int
+fun main(args: Array<String>) {
 
-    println("Enter rectangle width:")
-    width = readLine()!!.toInt()
-    println("Enter rectangle height:")
-    height = readLine()!!.toInt()
+    val inputName : String = args[1]
+    val outputName : String = args[3]
 
-    println("Enter output image name:")
-    val name = readLine()!!
+    val inputFile = File(inputName)
 
-    val imageFile = File(name)
+    val image : BufferedImage = ImageIO.read(inputFile)
 
-    val image = BufferedImage(width,height, BufferedImage.TYPE_INT_RGB)
+    for (x in 0 until image.width) {
+        for (y in 0 until image.height) {
 
-    val graphics = image.createGraphics()
+            val color = Color(image.getRGB(x, y))
 
-    graphics.color = Color.RED
-    graphics.drawLine(0,0,width-1,height-1)
-    graphics.drawLine(0,height-1, width-1, 0)
+            val r = 255 - color.red
+            val g = 255 - color.green
+            val b = 255 - color.blue
 
+            val reversedColor = Color(r,g,b)
 
-    saveImage(image,imageFile)
+            image.setRGB(x,y,reversedColor.rgb)
+
+        }
+    }
+
+    val outputFile = File(outputName)
+    saveImage(image,outputFile)
 }
 
 fun saveImage(image: BufferedImage, imageFile: File) {
