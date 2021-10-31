@@ -1,11 +1,9 @@
 package seamcarving
 
 
+import seamcarving.imageProcessing.ImageProcessor
 import seamcarving.imageProcessing.ImageUtils
-import java.awt.Color
-import java.awt.image.BufferedImage
-import java.io.File
-import javax.imageio.ImageIO
+
 
 fun main(args: Array<String>) {
 
@@ -14,6 +12,11 @@ fun main(args: Array<String>) {
 
     val image = ImageUtils.getImageFromFile(inputName)
 
+    val imageProcessor = ImageProcessor(image)
+
+    val processedImage = imageProcessor.getImageOfPixelEnergy()
+
+    ImageUtils.saveImage(processedImage,outputName)
 
 }
 
