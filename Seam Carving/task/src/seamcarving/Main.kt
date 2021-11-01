@@ -12,9 +12,13 @@ fun main(args: Array<String>) {
 
     val image = ImageUtils.getImageFromFile(inputName)
 
+    println("${image.height} and ${image.width}")
+
     val imageProcessor = ImageProcessor(image)
 
     val processedImage = imageProcessor.getImageOfPixelEnergy()
+
+    println("${processedImage.height} and ${processedImage.width}")
 
     ImageUtils.saveImage(processedImage,outputName)
 

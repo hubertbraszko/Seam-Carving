@@ -40,10 +40,9 @@ class ImageProcessor(private val image: BufferedImage) {
     }
 
     private fun calculateEnergyOfEachPixel() : MutableList<MutableList<Double>> {
-        //val energyMatrix = mutableListOf<MutableList<Double>>()
+
         val energyMatrix = MutableList(image.width) {MutableList(image.height) { 0.0 } }
         for(x in 0 until image.width) {
-            //energyMatrix.add(mutableListOf<Double>())
             for(y in 0 until image.height) {
                 energyMatrix[x][y] = getEnergyOfPixel(x,y)
             }
@@ -55,15 +54,31 @@ class ImageProcessor(private val image: BufferedImage) {
 
     private fun getEnergyOfPixel(x : Int, y : Int) : Double {
 
-        var trueX = x
-        var trueY = y
+        val xGradient = when (x) {
+            0 -> {
+                getSquareOfGradientX(x+1,y)
+            }
+            image.width - 1 -> {
+                getSquareOfGradientX(x-1,y)
+            }
+            else -> {
+                getSquareOfGradientX(x,y)
+            }
+        }
 
-        if(x == 0) trueX += 1
-        if(x == image.width - 1) trueX -= 1
-        if(y == 0) trueY += 1
-        if(y == image.height - 1) trueY -= 1
+        val yGradient = when (y) {
+            0 -> {
+                getSquareOfGradientY(x,y+1)
+            }
+            image.height - 1 -> {
+                getSquareOfGradientY(x,y-1)
+            }
+            else -> {
+                getSquareOfGradientY(x,y)
+            }
+        }
 
-        return sqrt(getSquareOfGradientX(trueX, trueY)+getSquareOfGradientY(trueX,trueY))
+        return sqrt(xGradient+yGradient)
     }
 
     private fun getSquareOfGradientX(x : Int, y : Int) : Double {
