@@ -3,6 +3,7 @@ package seamcarving
 
 import seamcarving.imageProcessing.ImageProcessor
 import seamcarving.imageProcessing.ImageUtils
+import seamcarving.imageProcessing.SeamFinder
 
 
 fun main(args: Array<String>) {
@@ -10,17 +11,22 @@ fun main(args: Array<String>) {
     val inputName : String = args[1]
     val outputName : String = args[3]
 
+
     val image = ImageUtils.getImageFromFile(inputName)
 
-    println("${image.height} and ${image.width}")
-
     val imageProcessor = ImageProcessor(image)
+    val energyImage = imageProcessor.getImageOfPixelEnergy()
 
-    val processedImage = imageProcessor.getImageOfPixelEnergy()
+    val seamFinder = SeamFinder(energyImage)
+    val seam = seamFinder.findVerticalSeam()
 
-    println("${processedImage.height} and ${processedImage.width}")
 
-    ImageUtils.saveImage(processedImage,outputName)
+    val output = ImageUtils.getImageFromFile(inputName)
+    ImageUtils.drawSeam(output,seam)
+
+    ImageUtils.saveImage(output,outputName)
 
 }
+
+
 
