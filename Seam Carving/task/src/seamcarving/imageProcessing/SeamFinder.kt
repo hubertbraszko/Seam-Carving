@@ -22,30 +22,6 @@ class SeamFinder(private val energyMatrix : BufferedImage, private val rawEnergy
         return toSeam(path);
     }
 
-//    private fun findSmallestFromArray(row : List<Node>) : Node {
-//        var smallest : Node = row[0]
-//        for(node in row) {
-//            if(node.value < smallest.value) smallest = node
-//        }
-//
-//        return smallest
-//    }
-
-//    private fun getUpperRow() : List<Node> {
-//        val nodes = ArrayList<Node>()
-//        for(x in 0 until energyMatrix.width) {
-//            nodes.add(graph[x][0])
-//        }
-//        return nodes
-//    }
-//
-//    private fun getLowerRow() : List<Node> {
-//        val nodes = ArrayList<Node>()
-//        for(x in 0 until energyMatrix.width) {
-//            nodes.add(graph[x][energyMatrix.height-1])
-//        }
-//        return nodes
-//    }
 
     private fun toSeam(nodes : List<Node>) : Seam {
         return nodes.mapNotNull{
@@ -133,8 +109,6 @@ class SeamFinder(private val energyMatrix : BufferedImage, private val rawEnergy
             }
             graph.add(row)
         }
-
-
 
         return graph
     }
