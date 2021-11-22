@@ -36,6 +36,19 @@ class ImageUtils {
             return transposed
         }
 
+        fun removeSeam(image : BufferedImage, seam : Seam) : BufferedImage {
+            var resized = BufferedImage(image.width-1, image.height, image.type)
+            var offset = 0;
+            for(y in 0 until image.height) {
+                for(x in 0 until image.width - 1) {
+                    if(seam.contains(Point(x,y))) offset++
+                    resized.setRGB(x, y, image.getRGB(x + offset, y))
+                }
+                offset = 0
+            }
+            return resized
+        }
+
     }
 
 }
