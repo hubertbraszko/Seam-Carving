@@ -7,10 +7,11 @@ import kotlin.math.*
 class ImageProcessor(private val image: BufferedImage) {
 
     private var maxEnergy : Double = 0.0
+    private var energyMatrix = calculateEnergyOfEachPixel()
 
     fun getImageOfPixelEnergy() : BufferedImage {
 
-        val energyMatrix = calculateEnergyOfEachPixel()
+       // val energyMatrix = calculateEnergyOfEachPixel()
 
         for(x in 0 until image.width) {
             for(y in 0 until image.height) {
@@ -21,6 +22,10 @@ class ImageProcessor(private val image: BufferedImage) {
             }
         }
         return image
+    }
+
+    fun getEnergyMatrix() : MutableList<MutableList<Double>> {
+        return energyMatrix
     }
 
     private fun normalizeEnergy(energy : Double) : Int {

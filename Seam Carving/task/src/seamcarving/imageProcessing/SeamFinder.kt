@@ -9,46 +9,49 @@ typealias Seam = List<Point>
 
 data class Point(val x : Int, val y : Int)
 
-class SeamFinder(private val energyMatrix : BufferedImage) {
+class SeamFinder(private val energyMatrix : BufferedImage, private val rawEnergyMatrix: MutableList<MutableList<Double>>) {
 
-    private val graph = imageToGraph(energyMatrix)
+    private val graph = imageToGraph(rawEnergyMatrix)
 
 
     fun findVerticalSeam() : Seam {
-        var source = findSmallestFromArray(getUpperRow())
-        val target = findSmallestFromArray(getLowerRow())
+        var source = Point(0,0)
+        val target = Point(graph.lastIndex, graph[0].lastIndex)
         findAllDistances(Point(source.x,source.y))
         val path = getShortestPath(Point(target.x,target.y))
         return toSeam(path);
     }
 
-    private fun findSmallestFromArray(row : List<Node>) : Node {
-        var smallest : Node = row[0]
-        for(node in row) {
-            if(node.value < smallest.value) smallest = node
-        }
+//    private fun findSmallestFromArray(row : List<Node>) : Node {
+//        var smallest : Node = row[0]
+//        for(node in row) {
+//            if(node.value < smallest.value) smallest = node
+//        }
+//
+//        return smallest
+//    }
 
-        return smallest
-    }
-
-    private fun getUpperRow() : List<Node> {
-        val nodes = ArrayList<Node>()
-        for(x in 0 until energyMatrix.width) {
-            nodes.add(graph[x][0])
-        }
-        return nodes
-    }
-
-    private fun getLowerRow() : List<Node> {
-        val nodes = ArrayList<Node>()
-        for(x in 0 until energyMatrix.width) {
-            nodes.add(graph[x][energyMatrix.height-1])
-        }
-        return nodes
-    }
+//    private fun getUpperRow() : List<Node> {
+//        val nodes = ArrayList<Node>()
+//        for(x in 0 until energyMatrix.width) {
+//            nodes.add(graph[x][0])
+//        }
+//        return nodes
+//    }
+//
+//    private fun getLowerRow() : List<Node> {
+//        val nodes = ArrayList<Node>()
+//        for(x in 0 until energyMatrix.width) {
+//            nodes.add(graph[x][energyMatrix.height-1])
+//        }
+//        return nodes
+//    }
 
     private fun toSeam(nodes : List<Node>) : Seam {
-        return nodes.map{Point(it.x,it.y)}
+        return nodes.mapNotNull{
+            if (it.y == 0 || it.y == graph[0].lastIndex) null
+            else Point(it.x,it.y - 1 )
+        }
     }
 
     private fun getShortestPath(target : Point) : List<Node> {
@@ -94,6 +97,12 @@ class SeamFinder(private val energyMatrix : BufferedImage) {
     private fun getChildren(node: Node) : List<Node> {
         val children = ArrayList<Node>()
 
+        //Add node to the right if the root is in first or list row
+        if (node.y == 0 || node.y == graph[0].lastIndex) {
+            addNodeToListIfExists(node.x + 1, node.y, children)
+        }
+
+
         addNodeToListIfExists(node.x - 1, node.y + 1, children)
         addNodeToListIfExists(node.x, node.y +1, children)
         addNodeToListIfExists(node.x + 1, node.y + 1, children)
@@ -103,22 +112,29 @@ class SeamFinder(private val energyMatrix : BufferedImage) {
 
 
     private fun addNodeToListIfExists(x : Int, y : Int, list : MutableList<Node>) {
-        if(x in 0 until energyMatrix.width && y in 0 until energyMatrix.height) {
+        if(x in 0..graph.lastIndex && y in 0..graph[0].lastIndex) {
             list.add(graph[x][y])
         }
     }
 
-    private fun imageToGraph(energyMatrix: BufferedImage) : List<List<Node>> {
+    private fun imageToGraph(rawEnergyMatrix: MutableList<MutableList<Double>>) : List<List<Node>> {
 
         val graph = ArrayList<MutableList<Node>>(energyMatrix.width)
 
         for(x in 0 until energyMatrix.width) {
             val row = ArrayList<Node>(energyMatrix.height)
-            for(y in 0 until energyMatrix.height) {
-                row.add(Node(x,y, Color(energyMatrix.getRGB(x,y)).red))
+            for(y in 0 until energyMatrix.height + 2) {
+               // row.add(Node(x,y, Color(energyMatrix.getRGB(x,y)).red))
+                if(y != 0 && y != energyMatrix.height + 1) {
+                    row.add(Node(x, y, rawEnergyMatrix[x][y-1]))
+                } else {
+                    row.add(Node(x,y, 0.0)) //padding
+                }
             }
             graph.add(row)
         }
+
+
 
         return graph
     }
@@ -128,8 +144,8 @@ class SeamFinder(private val energyMatrix : BufferedImage) {
 private data class Node(
     val x : Int,
     val y : Int,
-    var value : Int,
+    var value : Double,
     var isProcessed : Boolean = false,
     var previous : Node? = null,
-    var distance : Int = Int.MAX_VALUE
+    var distance : Double = Double.POSITIVE_INFINITY
 )

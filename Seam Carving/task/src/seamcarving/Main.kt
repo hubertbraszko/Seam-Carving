@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
     val imageProcessor = ImageProcessor(image)
     val energyImage = imageProcessor.getImageOfPixelEnergy()
 
-    val seamFinder = SeamFinder(energyImage)
+    val seamFinder = SeamFinder(energyImage, imageProcessor.getEnergyMatrix())
     val seam = seamFinder.findVerticalSeam()
 
 
