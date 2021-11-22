@@ -12,19 +12,23 @@ fun main(args: Array<String>) {
     val outputName : String = args[3]
 
 
-    val image = ImageUtils.getImageFromFile(inputName)
+    val image = ImageUtils.getImageFromFile(inputName) // Raw Image
 
-    val imageProcessor = ImageProcessor(image)
-    val energyImage = imageProcessor.getImageOfPixelEnergy()
+    val transposedImage = ImageUtils.transpose(image) // Transposed Raw Image
 
-    val seamFinder = SeamFinder(energyImage, imageProcessor.getEnergyMatrix())
-    val seam = seamFinder.findVerticalSeam()
+    val imageProcessor = ImageProcessor(transposedImage)  // ImageProcessor init
+    val energyImage = imageProcessor.getImageOfPixelEnergy() // Image of energy
+
+    val seamFinder = SeamFinder(energyImage, imageProcessor.getEnergyMatrix()) // SeamFinder init
+    val seam = seamFinder.findVerticalSeam() // Finding vertical seam
 
 
-    val output = ImageUtils.getImageFromFile(inputName)
-    ImageUtils.drawSeam(output,seam)
+    val output = ImageUtils.transpose(ImageUtils.getImageFromFile(inputName)) // getting Raw Image to paint seam on it
 
-    ImageUtils.saveImage(output,outputName)
+    ImageUtils.drawSeam(output,seam) // Drawing seam on original image
+
+
+    ImageUtils.saveImage(ImageUtils.transpose(output),outputName) // save original image with seam painted on it
 
 }
 
