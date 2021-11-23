@@ -1,6 +1,5 @@
 package seamcarving.imageProcessing
 
-import java.awt.Color
 import java.awt.image.BufferedImage
 import java.util.*
 import kotlin.collections.ArrayList
@@ -100,7 +99,6 @@ class SeamFinder(private val energyMatrix : BufferedImage, private val rawEnergy
         for(x in 0 until energyMatrix.width) {
             val row = ArrayList<Node>(energyMatrix.height)
             for(y in 0 until energyMatrix.height + 2) {
-               // row.add(Node(x,y, Color(energyMatrix.getRGB(x,y)).red))
                 if(y != 0 && y != energyMatrix.height + 1) {
                     row.add(Node(x, y, rawEnergyMatrix[x][y-1]))
                 } else {

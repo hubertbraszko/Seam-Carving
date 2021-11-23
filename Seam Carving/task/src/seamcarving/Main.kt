@@ -9,21 +9,20 @@ import java.awt.image.BufferedImage
 
 fun main(args: Array<String>) {
 
-    val inputName : String = args[1]
-    val outputName : String = args[3]
-    val deltaWidth : Int = args[5].toInt()
-    val deltaHeight : Int = args[7].toInt()
+    val (inputName, outputName, deltaWidth, deltaHeight) = parseArgs(args)
 
 
     var image = ImageUtils.getImageFromFile(inputName) // Raw Image
 
-    println("${image.width}  ${image.height}")
-
+    println("REDUCING WIDTH:")
+    //downsize to image.width - deltaWidth
     repeat (deltaWidth) {
         image = downsizeByOne(image)
         println("${it+1} / $deltaWidth")
     }
 
+    println("REDUCING HEIGHT:")
+    //downsize to image.height - deltaHeight
     image = ImageUtils.transpose(image)
     repeat(deltaHeight) {
         image = downsizeByOne(image)
@@ -31,10 +30,8 @@ fun main(args: Array<String>) {
     }
     image = ImageUtils.transpose(image)
 
-    println("${image.width}  ${image.height}")
-
     ImageUtils.saveImage(image,outputName)
-
+    println("---Image resized successfully---")
 
 }
 
@@ -44,3 +41,35 @@ fun downsizeByOne(image: BufferedImage): BufferedImage {
 
     return ImageUtils.removeSeam(image, seam)
 }
+
+fun parseArgs(args: Array<String>): Arguments {
+    if (args.size !in listOf(2, 4, 6, 8)) {
+        throw Exception("usage: -in <input image> -out <output image> -width <width> -height <height>")
+    }
+
+    var inputFilename = ""
+    var outputFilename = ""
+    var deltaWidth = 0
+    var deltaHeight = 0
+
+    for (arg in args.asList().chunked(2)) {
+        val paramKey = arg[0]
+        val paramValue = arg[1]
+
+        when (paramKey) {
+            "-in" -> inputFilename = paramValue
+            "-out" -> outputFilename = paramValue
+            "-width" -> deltaWidth = paramValue.toInt()
+            "-height" -> deltaHeight = paramValue.toInt()
+        }
+    }
+
+    return Arguments(inputFilename, outputFilename, deltaWidth, deltaHeight)
+}
+
+data class Arguments(
+    val inputFilename: String,
+    val outputFilename: String,
+    val deltaWidth: Int,
+    val deltaHeight: Int
+)
