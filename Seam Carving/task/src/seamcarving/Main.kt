@@ -11,7 +11,6 @@ fun main(args: Array<String>) {
 
     val (inputName, outputName, deltaWidth, deltaHeight) = parseArgs(args)
 
-
     var image = ImageUtils.getImageFromFile(inputName) // Raw Image
 
     println("REDUCING WIDTH:")
@@ -26,7 +25,7 @@ fun main(args: Array<String>) {
     image = ImageUtils.transpose(image)
     repeat(deltaHeight) {
         image = downsizeByOne(image)
-        println("${it+1} / $deltaWidth")
+        println("${it+1} / $deltaHeight")
     }
     image = ImageUtils.transpose(image)
 
