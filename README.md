@@ -17,8 +17,8 @@ This project performs content aware image resizing. It functions by establishing
 
 1. Clone the repository
 2. Inside the repository run ```./gradlew build``` and then ```./gradlew run --args="-in <filename.png> -out <filename-out.png> -width <deltaWidth> -height <deltaHeight>"``` where: <br/>
-```<filename.png> ``` is your input image, <br/>
-```<filename-out.png> ``` is your output image, <br/>
+```<filename.png>``` is your input image, <br/>
+```<filename-out.png>``` is your output image, <br/>
 ```<deltaWidth>``` is diffrence in images width, <br/>
 ```<deltaHeight>``` is diffrence in images height. <br/>
 
