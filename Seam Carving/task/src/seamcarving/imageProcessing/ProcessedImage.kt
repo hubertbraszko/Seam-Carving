@@ -4,29 +4,29 @@ import java.awt.Color
 import java.awt.image.BufferedImage
 import kotlin.math.*
 
-class ImageProcessor(private val image: BufferedImage) {
+class ProcessedImage(private val image: BufferedImage) {
+
 
     private var maxEnergy : Double = 0.0
-    private var energyMatrix = calculateEnergyOfEachPixel()
+    val energyMatrix = calculateEnergyOfEachPixel()
+    val energyImage : BufferedImage = getImageOfPixelEnergy()
 
-    fun getImageOfPixelEnergy() : BufferedImage {
+    private fun getImageOfPixelEnergy() : BufferedImage {
 
        // val energyMatrix = calculateEnergyOfEachPixel()
-
+        val energyImage = BufferedImage(image.width,image.height,image.type)
         for(x in 0 until image.width) {
             for(y in 0 until image.height) {
 
                 var normalizedEnergy = normalizeEnergy(energyMatrix[x][y])
                 var intensity = Color(normalizedEnergy,normalizedEnergy,normalizedEnergy)
-                image.setRGB(x,y,intensity.rgb)
+                energyImage.setRGB(x,y,intensity.rgb)
             }
         }
-        return image
+        return energyImage
     }
 
-    fun getEnergyMatrix() : MutableList<MutableList<Double>> {
-        return energyMatrix
-    }
+
 
     private fun normalizeEnergy(energy : Double) : Int {
 

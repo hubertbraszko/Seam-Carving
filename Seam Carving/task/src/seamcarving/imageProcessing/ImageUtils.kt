@@ -46,6 +46,7 @@ class ImageUtils {
                 }
                 offset = 0
             }
+
             return resized
         }
 

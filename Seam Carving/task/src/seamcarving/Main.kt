@@ -1,9 +1,8 @@
 package seamcarving
 
 
-import seamcarving.imageProcessing.ImageProcessor
+import seamcarving.imageProcessing.ProcessedImage
 import seamcarving.imageProcessing.ImageUtils
-import seamcarving.imageProcessing.Seam
 import seamcarving.imageProcessing.SeamFinder
 import java.awt.image.BufferedImage
 
@@ -17,62 +16,31 @@ fun main(args: Array<String>) {
 
 
     var image = ImageUtils.getImageFromFile(inputName) // Raw Image
-    var img = ImageUtils.getImageFromFile(inputName)
 
     println("${image.width}  ${image.height}")
 
-    var imageProcessor : ImageProcessor
-    var energyImage : BufferedImage
-    var seamFinder : SeamFinder
-    var seam : Seam
-    //var img : BufferedImage
-
-    for (i in 0 until deltaWidth) {
-        imageProcessor = ImageProcessor(image)
-        energyImage = imageProcessor.getImageOfPixelEnergy()
-        seamFinder = SeamFinder(energyImage, imageProcessor.getEnergyMatrix())
-        seam = seamFinder.findVerticalSeam()
-        image = ImageUtils.removeSeam(img,seam)
-        ImageUtils.saveImage(image,outputName)
-        img = ImageUtils.getImageFromFile(outputName)
-        println("${i+1} / $deltaWidth")
+    repeat (deltaWidth) {
+        image = downsizeByOne(image)
+        println("${it+1} / $deltaWidth")
     }
 
-    image = ImageUtils.transpose(ImageUtils.getImageFromFile(outputName))
-    img = ImageUtils.transpose(ImageUtils.getImageFromFile(outputName))
-    for (i in 0 until deltaHeight) {
-        imageProcessor = ImageProcessor(image)
-        energyImage = imageProcessor.getImageOfPixelEnergy()
-        seamFinder = SeamFinder(energyImage, imageProcessor.getEnergyMatrix())
-        seam = seamFinder.findVerticalSeam()
-        image = ImageUtils.removeSeam(img,seam)
-        ImageUtils.saveImage(image,outputName)
-        img = ImageUtils.getImageFromFile(outputName)
-        println("${i+1} / $deltaHeight")
+    image = ImageUtils.transpose(image)
+    repeat(deltaHeight) {
+        image = downsizeByOne(image)
+        println("${it+1} / $deltaWidth")
     }
-
-    image = ImageUtils.transpose(ImageUtils.getImageFromFile(outputName))
-
-  //  val transposedImage = ImageUtils.transpose(image) // Transposed Raw Image
-
-   // val imageProcessor = ImageProcessor(image)  // ImageProcessor init
-   // val energyImage = imageProcessor.getImageOfPixelEnergy() // Image of energy
-
-  //  val seamFinder = SeamFinder(energyImage, imageProcessor.getEnergyMatrix()) // SeamFinder init
-   // val seam = seamFinder.findVerticalSeam() // Finding vertical seam
-
-
-   // val img = ImageUtils.getImageFromFile(inputName) // getting Raw Image to paint seam on it
-
-  //  ImageUtils.drawSeam(output,seam) // Drawing seam on original image
-
-
+    image = ImageUtils.transpose(image)
 
     println("${image.width}  ${image.height}")
 
-    ImageUtils.saveImage(image,outputName) // save original image with seam painted on it
+    ImageUtils.saveImage(image,outputName)
+
 
 }
 
+fun downsizeByOne(image: BufferedImage): BufferedImage {
+    val processedImage = ProcessedImage(image)
+    val seam = SeamFinder(processedImage.energyImage, processedImage.energyMatrix).findVerticalSeam()
 
-
+    return ImageUtils.removeSeam(image, seam)
+}
