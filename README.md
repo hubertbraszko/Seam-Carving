@@ -30,7 +30,10 @@ This project performs content aware image resizing. It functions by establishing
 ## Process of reducing image size and example output
 
 1. First the program calculates each pixels importance, resulting in grey-scale image. The brighter the pixel the more important it is.<br/>
-![Energy Image](images/trees-energy.png)
+  
+|Original|Pixel Energies|
+|:-:|:-:|
+|![Original Image](images/trees.png)|![Energy Image](images/trees-energy.png)|
   
   
 2. Then the path of least importance is calculated using Dijkstra's shortest path algorithm which results in finding a single seam. The algorithm technically calculates vertical seam only, but the horizontal saem can also be calculated by transposing an image before finding a seam.<br/>
