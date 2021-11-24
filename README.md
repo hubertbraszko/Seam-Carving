@@ -51,6 +51,8 @@ This project performs content aware image resizing. It functions by establishing
 <div id="comparison">
 
 ## Comparison with different image resizing methods
+  
+All images below are the same size
 
 | Cropped Image | Compressed Image | Seam Carving |
 |:-:|:-:|:-:|
