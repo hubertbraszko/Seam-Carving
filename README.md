@@ -5,6 +5,7 @@ Seam carving is an image processing technique for content aware image resizing.
 1. [Description](#description)
 2. [How to build and run](#build)
 3. [Process of reducing image size and example output](#example)
+4. [Comparison with different image resizing methods](#comparison)
 
 <div id="description">
 
@@ -36,6 +37,16 @@ This project performs content aware image resizing. It functions by establishing
 3. Then the seam is removed. This process is reapeted number of times to get and image reduced to desired size. Results: <br/>
 ![Original Image](images/trees.png)
 ![Reduced Image](images/trees-reduced.png)
+
+<br/>
+
+<div id="comparison">
+
+## Comparison with different image resizing methods
+
+|Cropped Image|Compressed Image|Seam Carving|
+|:-:|:-:|:-:|
+|![Cropped Image](images/trees-cropped.png)|![Compressed Image](images/trees-compressed.png)|![Seam carving](images/trees-reduced.png)|
 
 
 
