@@ -21,7 +21,8 @@ This project performs content aware image resizing. It functions by establishing
 ```<filename.png>``` is your input image, <br/>
 ```<filename-out.png>``` is your output image, <br/>
 ```<deltaWidth>``` is diffrence in images width, <br/>
-```<deltaHeight>``` is diffrence in images height. <br/>
+```<deltaHeight>``` is diffrence in images height. <br/> <br/>
+    **IMPORTANT NOTE: Put your file ```<filename.png>``` in the ```/Seam Carving/task``` directory or provide an absolute path**
 
 
 
